@@ -1,0 +1,11 @@
+now = int(input())
+nowMax = now
+secMax = 0
+while now != 0:
+    now = int(input())
+    if nowMax <= now:
+        secMax = nowMax
+        nowMax = now
+    elif nowMax >= now >= secMax:
+        secMax = now
+print(secMax)

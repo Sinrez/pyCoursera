@@ -1,0 +1,11 @@
+now = int(input())
+nowMax = now
+count = 1
+while now != 0:
+    now = int(input())
+    if now == nowMax:
+        count += 1
+    elif now > nowMax:
+        nowMax = now
+        count = 1
+print(count)

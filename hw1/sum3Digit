@@ -1,0 +1,6 @@
+i = int(input())
+a = i // 100
+b = i % 100 // 10
+c = i % 100 % 10
+sum = a + b + c
+print(sum)

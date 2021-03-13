@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bill>
+    <meta>
+        <number>6</number>
+        <date>05.08.2018</date>
+    </meta>
+    <products>
+        <product name="Обслуживание вычислительной техники" count="1" price="2200.00" />
+        <product name="Ремонт сетевого принтера" count="1" price="1880.00" />
+        <product name="Ремонт блока питания" count="1" price="340.00" />
+        <product name="Конденсаторы" count="4" price="44.30" />
+    </products>
+</bill>

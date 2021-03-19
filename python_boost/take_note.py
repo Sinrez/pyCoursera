@@ -8,7 +8,7 @@ def input_notes():
     while go_input != 'N':
         note_name = input('Введите название заметки: ')
         note_text = input('Введите текст заметки: ')
-        note_tags = input('Введите тэги заметки через запятую: ').split(',')
+        note_tags = input('Введите тэги заметки через пробел: ').split(' ')
         go_input = input('Ввести еще одну заметку? Y/N: ').upper()
         all_notes_test.append(take_note(note_name, note_text, note_tags))
 input_notes()
@@ -18,7 +18,7 @@ def all_notes(tag, notes):
     for dict in notes:
         if tag in dict['tags']:
             res.append(dict)
-    return ' '.join(map(str, res)).strip('{').strip('}')
+    return ' '.join(map(str, res)).strip('{').strip('}').replace('} {', ' || ')
 
 def main():
     the_tag = input('Ввведите тэг для поиска заметки или Q для выхода: ')

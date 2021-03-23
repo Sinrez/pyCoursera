@@ -3,6 +3,7 @@ import json
 from pprint import pprint
 
 all_notes_test = []
+tmp_notes=[]
 
 def take_note(name, str_txt, tags):
     "возращаем словарь заметок"
@@ -26,6 +27,13 @@ def input_notes():
         go_input = input('Ввести еще одну заметку? Y/N: ').upper()
         all_notes_test.append(take_note(note_name, note_text, note_tags))
 
+def return_before_notes():
+    "выборка ранее сохраненных заметок из файла"
+    with open('notes.txt', 'r') as f:
+        tmp_notes = list(json.load(f))
+    return tmp_notes
+
+
 def return_all_notes():
     "чтение словаря заметок из json-файла"
     with open('notes.txt', 'r') as f:
@@ -45,7 +53,7 @@ def all_notes(tag, notes):
 
 def main():
     "основной блок программы"
-
+    all_notes_test.extend(return_before_notes())
     input_notes()
     save_note(all_notes_test)
 

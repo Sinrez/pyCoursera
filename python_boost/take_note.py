@@ -1,6 +1,8 @@
 import time
 import json
 
+all_notes_test = []
+
 def take_note(name, str_txt, tags):
     #возращаем словарь заметок
     dt = time.strftime("%d.%m.%Y г. %H:%M", time.localtime())
@@ -12,7 +14,7 @@ def save_note(notes):
     with open("notes.txt", "a") as write_file:
         json.dump(notes, write_file)
 
-all_notes_test = []
+
 def input_notes():
     #пользовательский ввод заметок
     go_input = 'Y'
@@ -23,7 +25,6 @@ def input_notes():
         go_input = input('Ввести еще одну заметку? Y/N: ').upper()
         all_notes_test.append(take_note(note_name, note_text, note_tags))
         save_note(take_note(note_name, note_text, note_tags))
-input_notes()
 
 def return_all_notes():
     # чтение словаря заметок из json-файла
@@ -42,6 +43,9 @@ def all_notes(tag, notes):
 
 def main():
     #основной блок программы
+
+    input_notes()
+
     the_tag = input('Ввведите тэг для поиска заметки, F для вывода всех заметок из файла или Q для выхода: ')
     if the_tag.upper() == 'Q':
         exit()
@@ -53,7 +57,7 @@ def main():
     elif all_notes(the_tag,all_notes_test) =='':
         print("Нет заметки по такому тэгу")
     else:
-        print(all_notes(the_tag,all_notes_test))
+        print(all_notes(the_tag, all_notes_test))
 
 main()
 

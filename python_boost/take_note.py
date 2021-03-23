@@ -12,7 +12,7 @@ def take_note(name, str_txt, tags):
 
 def save_note(notes):
     "сохранение словаря заметок в json-файл в режиме дозаписи"
-    with open("notes.txt", "a") as write_file:
+    with open("notes.txt", "w") as write_file:
         json_string = json.dumps(notes)
         write_file.write(json_string)
 

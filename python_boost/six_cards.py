@@ -9,7 +9,6 @@ url = 'https://deckofcardsapi.com/api/deck/'+deck_id+'/draw/?count=6'
 six_cards = requests.get(url)
 six_cards_json = six_cards.json()
 
-
 for c in six_cards_json['cards']:
     suit = c['value']
     print(f'Вот карта номинала {suit}')

@@ -13,4 +13,5 @@ for c in six_cards_json['cards']:
     suit = c['value']
     print(f'Вот карта номинала {suit}')
     print(c['images']['png'])
+    print(c)
 

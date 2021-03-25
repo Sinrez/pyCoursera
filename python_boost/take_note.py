@@ -1,6 +1,7 @@
 import time
 import json
 from pprint import pprint
+"Реализация Zettelkasten https://habr.com/ru/post/508672/"
 
 all_notes_test = []
 tmp_notes=[]

@@ -13,7 +13,7 @@ class KiloComvertGUI:
 
         #элементы для верхней рамки
         self.prompt_label = tkinter.Label(self.top_frame, text ='Введите расстояние в км:')
-        self.kilo_entry = tkinter.Entry(self.top_frame, width = 10)
+        self.kilo_entry = tkinter.Entry(self.top_frame, width = 50)
 
         #Упаковать элементы верхней рамки
         self.prompt_label.pack(side ='left')

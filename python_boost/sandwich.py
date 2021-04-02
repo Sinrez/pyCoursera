@@ -65,11 +65,15 @@ class Sandwich():
 
 class SandwichMaker():
     'класс SandwichMaker, который будет уметь делать бутерброды из переданных ему ингредиентов'
-
-    def __init__(self, sandwich):
-        self.sandwich = sandwich
+    def __init__(self, bread, wurst, cheese, butter, maker):
+        self.bread = bread
+        self.wurst= wurst
+        self.cheese = cheese
+        self.butter = butter
+        self.maker = maker
 
     def __str__(self):
+        sandwich = Sandwich(self.bread, self.wurst, self.cheese, self.butter, self.maker)
         return f'Готов  {sandwich.__str__()}'
 
 if __name__ == "__main__":
@@ -142,9 +146,8 @@ if __name__ == "__main__":
         wurst = Wurst(wurst_types[wurst_type_in])
         cheese = Cheese(cheese_types[cheese_type_in])
         butter = Butter(butter_types[butter_type_in])
-        sandwich = Sandwich(bread,wurst,cheese,butter,makers[maker_in])
-        sandwichMaker = SandwichMaker(sandwich)
-        print(sandwichMaker)
+        sandwichMaker = SandwichMaker(bread,wurst,cheese,butter,makers[maker_in])
+        print(sandwichMaker.__str__())
         go_input = input('Сделать еще один бутер? Y/N? Q - для выхода: ').upper()
         if go_input == 'Q':
             exit('Спасибо за обращение. Если нужно приготовить бутер - запустите заново программу')

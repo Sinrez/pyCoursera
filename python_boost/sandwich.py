@@ -37,7 +37,7 @@ class Cheese:
         return self.cheese_type
 
     def __str__(self):
-        return f'с  {self.cheese_type}'
+        return f'с {self.cheese_type}'
 
 class Butter:
     'для масла'
@@ -52,29 +52,28 @@ class Butter:
 
 class Sandwich():
     'класс Sandwich, который будет описывать сам бутерброд (из каких ингредиентов состоит, кто его сделал)'
-    def __init__(self, bread, wurst, cheese, butter, maker):
+    def __init__(self, bread, wurst, cheese, butter):
         self.bread = bread
         self.wurst= wurst
         self.cheese = cheese
         self.butter = butter
-        self.maker = maker
 
     def __str__(self):
-        return f'бутер, сделаннный из {self.bread} {self.wurst} {self.cheese} {self.butter}. По рецепту повара {self.maker}'
+        return f'Бутер, сделаннный из {self.bread}{self.wurst} {self.cheese} {self.butter}.'
 
 
 class SandwichMaker():
     'класс SandwichMaker, который будет уметь делать бутерброды из переданных ему ингредиентов'
-    def __init__(self, bread, wurst, cheese, butter, maker):
-        self.bread = bread
-        self.wurst= wurst
-        self.cheese = cheese
-        self.butter = butter
-        self.maker = maker
+    def __init__(self, maker_name):
+        self.maker_name = maker_name
+
+    def make_sandwitch(self, bread, wurst, cheese,butter):
+       return Sandwich(bread, wurst, cheese, butter)
 
     def __str__(self):
-        sandwich = Sandwich(self.bread, self.wurst, self.cheese, self.butter, self.maker)
-        return f'Готов  {sandwich.__str__()}'
+       return f'Приготовлен поваром: {self.maker_name}'
+
+
 
 if __name__ == "__main__":
     """ Инициализируйте несколько объектов объектов каждого типа (разные булки хлеба, разные добавки, несколько поваров)
@@ -110,8 +109,8 @@ if __name__ == "__main__":
     }
 
     makers = {
-        1: 'Бутербродова',
-        2: 'Мясоедова'
+        1: 'Бутербродов',
+        2: 'Мясоедов'
     }
 
     go_input = 'Y'
@@ -146,7 +145,8 @@ if __name__ == "__main__":
         wurst = Wurst(wurst_types[wurst_type_in])
         cheese = Cheese(cheese_types[cheese_type_in])
         butter = Butter(butter_types[butter_type_in])
-        sandwichMaker = SandwichMaker(bread,wurst,cheese,butter,makers[maker_in])
+        sandwichMaker = SandwichMaker(makers[maker_in])
+        print(sandwichMaker.make_sandwitch(bread, wurst, cheese, butter).__str__())
         print(sandwichMaker.__str__())
         go_input = input('Сделать еще один бутер? Y/N? Q - для выхода: ').upper()
         if go_input == 'Q':

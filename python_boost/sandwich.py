@@ -15,7 +15,7 @@ class Bread:
         return self.broad_yeast
 
     def __str__(self):
-        return self.broad_color + ' хлебом '+self.broad_grain +' '+self.broad_yeast
+        return f'{self.broad_color} {self.broad_grain} {self.broad_yeast} хлеба  '
 
 class Wurst:
     'Колбасный цех'
@@ -26,7 +26,7 @@ class Wurst:
         return self.wurst_type
 
     def __str__(self):
-        return 'с кобасой вида ' + self.wurst_type
+        return f'с {self.wurst_type}'
 
 class Cheese:
     'Сырный класс'
@@ -37,7 +37,7 @@ class Cheese:
         return self.cheese_type
 
     def __str__(self):
-        return 'с сыром вида '+ self.cheese_type
+        return f'с  {self.cheese_type}'
 
 class Butter:
     'для масла'
@@ -48,7 +48,7 @@ class Butter:
         return self.butter_type
 
     def __str__(self):
-        return 'с маслом типа '+self.butter_type
+        return f'с {self.butter_type}'
 
 class Sandwich():
     'класс Sandwich, который будет описывать сам бутерброд (из каких ингредиентов состоит, кто его сделал)'
@@ -60,44 +60,98 @@ class Sandwich():
         self.maker = maker
 
     def __str__(self):
-        return 'Бутер сделан из' + self.bread + self.wurst + self.cheese + self.butter + ' сделал ' + self.maker
+        return f'бутер, сделаннный из {self.bread} {self.wurst} {self.cheese} {self.butter}. По рецепту повара {self.maker}'
 
 
 class SandwichMaker():
     'класс SandwichMaker, который будет уметь делать бутерброды из переданных ему ингредиентов'
-    def __init__(self, bread):
-        self.bread = bread
 
-    def set_bread(self,bread):
-        self.bread = bread
+    def __init__(self, sandwich):
+        self.sandwich = sandwich
 
     def __str__(self):
-        return 'Изготовлен бутер с ' + self.bread.__str__()
+        return f'Готов  {sandwich.__str__()}'
 
 if __name__ == "__main__":
     """ Инициализируйте несколько объектов объектов каждого типа (разные булки хлеба, разные добавки, несколько поваров)
     и создайте три разных бутерброда."""
     br_color_type = {
-        1: 'черным',
-        2: 'белым',
-        3: 'серым'
+        1: 'черного',
+        2: 'белого',
+        3: 'серого'
     }
     br_grain_type = {
-        1: 'ржаной',
-        2: 'пшеничный'
+        1: 'ржаного',
+        2: 'пшеничного'
     }
     br_yeast_type = {
-        1: 'дрожжевой',
-        2: 'бездрожжевой'
+        1: 'дрожжевого',
+        2: 'бездрожжевого'
     }
-    print('Готовим бутер')
-    broad_color_in = int(input('Введите 1 - для выбора черного хлеба, 2 - белого, 3 - серного: ' ))
-    broad_grain_in = int(input('Введите 1 - для ржаного хлеба, 2 - для пшеничного: '))
-    broad_yeast_in = int(input('Введите 1 - для дрожжевого хлеба, 2 - для бездрожжевого: '))
+    # fabric_buter = []
 
-    bread = Bread(br_color_type[broad_color_in],br_grain_type[broad_grain_in],br_yeast_type[broad_yeast_in])
-    s_macker = SandwichMaker(bread)
-    print(' ')
-    print(s_macker.__str__())
-    print('Я программа MVP -  пристрелите меня')
+    wurst_types = {
+        1: 'копченой колбасой',
+        2: 'ветчиной'
+    }
+
+    cheese_types = {
+        1: 'копченым сыром',
+        2: 'классическим сыром'
+    }
+
+    butter_types = {
+        1: 'обычным маслом',
+        2: 'диетическим маслом'
+    }
+
+    makers = {
+        1: 'Бутербродова',
+        2: 'Мясоедова'
+    }
+
+    go_input = 'Y'
+    while go_input != 'N':
+        print('Готовим бутер')
+        broad_color_in = int(input('Введите 1 - для выбора черного хлеба, 2 - белого, 3 - серного: '))
+        if broad_color_in not in range(1,4):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        broad_grain_in = int(input('Введите 1 - для ржаного хлеба, 2 - для пшеничного: '))
+        if broad_grain_in not in range(1,3):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        broad_yeast_in = int(input('Введите 1 - для дрожжевого хлеба, 2 - для бездрожжевого: '))
+        if broad_yeast_in not in range(1, 3):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        wurst_type_in = int(input('Введите 1 - для копченой колбасы, 2 - для ветчины: '))
+        if wurst_type_in not in range(1, 3):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        cheese_type_in = int(input('Введите 1 - для копченого сыра, 2 - для классического сыра: '))
+        if cheese_type_in not in range(1, 3):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        butter_type_in = int(input('Введите 1 - обычное масло, 2 - диетическое: '))
+        if butter_type_in not in range(1, 3):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        maker_in = int(input('По рецепту какого повара? Введите 1 -Бутербродов, 2 - Мясоедов: '))
+        if maker_in not in range(1, 3):
+            exit('Выбран неcуществующий пункт интерфейса! Перзапустите программу!')
+        # sandwich_count_in = int(input('Введите число - сколько таких бутебродов сделать: '))
+        # if sandwich_count_in <= 0:
+        #     print('Число бутеров должно быть больше нуля! Перзапустите программу!')
+        #     break
+        bread = Bread(br_color_type[broad_color_in], br_grain_type[broad_grain_in], br_yeast_type[broad_yeast_in])
+        wurst = Wurst(wurst_types[wurst_type_in])
+        cheese = Cheese(cheese_types[cheese_type_in])
+        butter = Butter(butter_types[butter_type_in])
+        sandwich = Sandwich(bread,wurst,cheese,butter,makers[maker_in])
+        sandwichMaker = SandwichMaker(sandwich)
+        print(sandwichMaker)
+        go_input = input('Сделать еще один бутер? Y/N? Q - для выхода: ').upper()
+        if go_input == 'Q':
+            exit('Спасибо за обращение. Если нужно приготовить бутер - запустите заново программу')
+
+
+
+
+
+
 

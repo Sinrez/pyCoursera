@@ -157,18 +157,18 @@ print(f"Сумма цифр числа {dgt_in}, которые делятся �
 #
 # print(f'Сумма {n_inp} чисел Фибоначчи: {sum_fibo(n)}')
 
-# 10 через циклы
+# через циклы
 
-def fibonacci(n):
-    a, b = 1, 1
-    for i in range(n):
-        yield a
-        a, b = b, a + b
-
-n_inp = input('Введите число: ').strip()
-if not n_inp.isdigit():
-    exit('Нужно ввести число!')
-
-data = list(fibonacci(int(n_inp)))
-
-print(f'Сумма {n_inp} чисел Фибоначчи: {sum(data)}')
+# def fibonacci(n):
+#     a, b = 1, 1
+#     for i in range(n):
+#         yield a
+#         a, b = b, a + b
+#
+# n_inp = input('Введите число: ').strip()
+# if not n_inp.isdigit():
+#     exit('Нужно ввести число!')
+#
+# data = list(fibonacci(int(n_inp)))
+#
+# print(f'Сумма {n_inp} чисел Фибоначчи: {sum(data)}')

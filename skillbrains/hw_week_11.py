@@ -8,8 +8,8 @@ def avg_dgt(*args):
         for a in args:
             summ += int(a)
             i += 1
-        print(f'Среднее арифметическое: {summ / i}')
-        exit()
+        return (f'Среднее арифметическое: {summ / i}')
+        # exit()
     except TypeError:
         exit('Нужно ввести число')
     except ValueError:
@@ -18,7 +18,7 @@ def avg_dgt(*args):
         exit('Что-то еще упало')
 
 def run_avg_dgt():
-    dgts = input('Введите числа через пробел: ').strip().replace('', ' ').split()
+    dgts = input('Введите числа через пробел: ').strip().split()
     if len(dgts) > 1:
         print(avg_dgt(*dgts))
     else:
@@ -40,6 +40,6 @@ def two_val():
         print('Что-то еще упало')
 
 if __name__ == '__main__':
-    # run_avg_dgt()
-    two_val()
+    run_avg_dgt()
+    # two_val()
 

@@ -19,4 +19,7 @@ class User:
         )
 
 jack = User("Jack", "secret_key")
-jack.password
+# jack.password
+
+jack.password = "new_secret"
+print(jack._hashed_password)

@@ -1,0 +1,8 @@
+Small Russian model for Vosk (Android, RPi, other small devices)
+
+Openstt audiobooks %WER 22.21
+Openstt youtube    %WER 30.89
+Sova devices       %WER 28.65
+
+improved latency (15 frames forward)
+

@@ -1,7 +1,26 @@
-from flask import Flask, render_template, request,escape
+from flask import Flask, render_template, request, escape
 from vl2 import search4letters
+import sqlite3
 
 app = Flask(__name__)
+
+def add_logs_db(req: 'flask_request', res: str):
+    # Вставляем в таблицу pyblog первую запись со значениями title и article
+    conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
+    cursor = conn.cursor()
+    try:
+        # Создаем таблицу лога
+        cursor.execute(
+            '''CREATE TABLE IF NOT EXISTS vsearhlog_tb ( phrase text, letters text, ip text, browser_string text, results text )''')
+    except sqlite3.ProgrammingError:
+        print('Таблица не найдена или уже существует')
+    except sqlite3.Warning:
+        exit('Ошибка БД')
+    mydata = (req.form['phrase'], req.form['letters'], req.remote_addr, req.user_agent.browser, res)
+    cursor.execute("INSERT INTO vsearhlog_tb (phrase, letters, ip, browser_string, results) VALUES (?, ?, ?, ?, ?)", mydata)
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 @app.route('/search4', methods=['POST'])
 def do_search() ->str:
@@ -10,6 +29,7 @@ def do_search() ->str:
     results = str(search4letters(phrase, letters))
     title = 'Here are your results:» (Ваши результаты: )'
     log_request(request, results)
+    add_logs_db(request, results)
     return render_template('results.html', the_phrase = phrase, the_letters = letters, the_results = results, the_title = title,)
 
 @app.route('/')
@@ -31,6 +51,9 @@ def view_the_log() -> 'html':
                 contents[-1].append(escape(item))
     titles = ('Form Data', 'Remote_addr', 'User_agent', 'Results')
     return render_template('viewlog.html', the_title='View Log',the_row_titles=titles, the_data=contents,)
+
+def view_the_log_formdb():
+    pass
 
 if __name__ =='__main__':
     app.run(debug=True)

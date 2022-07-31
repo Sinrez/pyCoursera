@@ -4,7 +4,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-def add_logs_db(req: 'flask_request', res: str):
+def add_logs_db(req: 'flask_request', res: str) -> None:
     # Вставляем в таблицу pyblog первую запись со значениями title и article
     conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
     cursor = conn.cursor()
@@ -52,8 +52,21 @@ def view_the_log() -> 'html':
     titles = ('Form Data', 'Remote_addr', 'User_agent', 'Results')
     return render_template('viewlog.html', the_title='View Log',the_row_titles=titles, the_data=contents,)
 
-def view_the_log_formdb():
-    pass
+# @app.route('/viewlogdb')
+# def view_the_log_formdb():
+#     contents = []
+#     conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
+#     cursor = conn.cursor()
+#     cursor.execute('SELECT * FROM vsearhlog_tb')
+#     row = cursor.fetchone()
+#     titles = ('Form Data', 'Remote_addr', 'User_agent', 'Results')
+#     return render_template('viewlog.html', the_title='View Log',the_row_titles=titles, the_data=contents,)
+#     # while row is not None:
+#     #     print(row[0])
+#     #     print(row[1])
+#     #     print(row[2])
+#     #     print('-------------')
+#     #     row = cursor.fetchone()
 
 if __name__ =='__main__':
     app.run(debug=True)

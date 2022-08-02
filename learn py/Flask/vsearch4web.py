@@ -52,21 +52,20 @@ def view_the_log() -> 'html':
     titles = ('Form Data', 'Remote_addr', 'User_agent', 'Results')
     return render_template('viewlog.html', the_title='View Log',the_row_titles=titles, the_data=contents,)
 
-# @app.route('/viewlogdb')
-# def view_the_log_formdb():
-#     contents = []
-#     conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
-#     cursor = conn.cursor()
-#     cursor.execute('SELECT * FROM vsearhlog_tb')
-#     row = cursor.fetchone()
-#     titles = ('Form Data', 'Remote_addr', 'User_agent', 'Results')
-#     return render_template('viewlog.html', the_title='View Log',the_row_titles=titles, the_data=contents,)
-#     # while row is not None:
-#     #     print(row[0])
-#     #     print(row[1])
-#     #     print(row[2])
-#     #     print('-------------')
-#     #     row = cursor.fetchone()
+@app.route('/viewlogdb')
+def view_the_log_formdb():
+    contents = []
+    conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM vsearhlog_tb')
+    row = cursor.fetchone()
+    while row is not None:
+        contents.append([])
+        for item in row:
+            contents[-1].append(escape(item))
+        row = cursor.fetchone()
+    titles = ('Form Data', 'Text','Remote_addr', 'User_agent', 'Results')
+    return render_template('viewlog.html', the_title='View Log', the_row_titles=titles, the_data=contents, )
 
 if __name__ =='__main__':
     app.run(debug=True)

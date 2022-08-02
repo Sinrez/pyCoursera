@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, escape
 from vl2 import search4letters
 import sqlite3
 
+
 app = Flask(__name__)
 
 def add_logs_db(req: 'flask_request', res: str) -> None:
-    # Вставляем в таблицу pyblog первую запись со значениями title и article
     conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
     cursor = conn.cursor()
     try:
@@ -16,14 +16,14 @@ def add_logs_db(req: 'flask_request', res: str) -> None:
         print('Таблица не найдена или уже существует')
     except sqlite3.Warning:
         exit('Ошибка БД')
-    mydata = (req.form['phrase'], req.form['letters'], req.remote_addr, req.user_agent.browser, res)
+    mydata = (req.form['phrase'], req.form['letters'], req.remote_addr, req.user_agent.platform, res)
     cursor.execute("INSERT INTO vsearhlog_tb (phrase, letters, ip, browser_string, results) VALUES (?, ?, ?, ?, ?)", mydata)
     conn.commit()
     cursor.close()
     conn.close()
 
 @app.route('/search4', methods=['POST'])
-def do_search() ->str:
+def do_search() -> str:
     phrase = request.form['phrase']
     letters = request.form['letters']
     results = str(search4letters(phrase, letters))
@@ -53,7 +53,7 @@ def view_the_log() -> 'html':
     return render_template('viewlog.html', the_title='View Log',the_row_titles=titles, the_data=contents,)
 
 @app.route('/viewlogdb')
-def view_the_log_formdb():
+def view_the_log_formdb() -> 'html':
     contents = []
     conn = sqlite3.connect('vsearh_log.sqlite', check_same_thread=False)
     cursor = conn.cursor()

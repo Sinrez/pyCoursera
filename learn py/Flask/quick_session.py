@@ -4,6 +4,7 @@ app = Flask(__name__)
 app.secret_key = 'SuperSerucr007pwsd'
 
 
+
 @app.route('/setuser/<user>')
 def setuser(user: str) -> str:
     session['user'] = user

@@ -81,6 +81,7 @@ def view_the_log() -> 'html':
 
 @app.route('/viewlogdb')
 @check_logged_in
+
 def view_the_log_formdb() -> 'html':
     contents = []
     try:

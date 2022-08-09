@@ -14,8 +14,6 @@ class SQLError(Exception):
 
 
 class UseDatabase:
-    def __init__(self, config: dict):
-        self.configuration = config
 
     def __enter__(self) -> 'cursor':
         try:

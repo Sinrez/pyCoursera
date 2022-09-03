@@ -51,7 +51,7 @@ def cezar_make(SYMBOLS, message, key, mode) -> 'str':
 # pyperclip.copy(res)
 # print(__name__)
 
-def main() ->'str':
+def main() -> 'none':
     res = cezar_make(SYMBOLS, message, key, mode)
     print(res)
     pyperclip.copy(res)

@@ -27,10 +27,16 @@ button = Button(
 #     y = 100
 # )
 
-button.grid(
-    row = 0,
-    column = 0
+lable = Label(
+    text='надпись',
+    font=('Verdana', '24'),
 )
+
+lable.pack()
+# button.grid(
+#     row = 0,
+#     column = 0
+# )
 
 button2 = Button(
     text='кнопка2',
@@ -40,12 +46,14 @@ button2 = Button(
     font=('Verdana', '24'),
     command=clicked
 )
-# button2.pack()
 
-button2.grid(
-    row = 0,
-    column = 1
-)
+button.pack()
+button2.pack()
+
+# button2.grid(
+#     row = 0,
+#     column = 1
+# )
 
 
 if __name__ == '__main__':

@@ -32,16 +32,21 @@ fake_database = {'users':[
     ], }
 
 @api.put('/user/{user_id}')
-def update_user(user_id: int, user: pydantic_models.User = fastapi.Body()): # используя fastapi.Body() мы явно указываем, что отправляем информацию в теле запроса
-    for index, u in enumerate(fake_database['users']): # так как в нашей бд юзеры хранятся в списке, нам нужно найти их индексы внутри этого списка
+def update_user(user_id: int, user: pydantic_models.User = fastapi.Body()):
+    # используя fastapi.Body() мы явно указываем, что отправляем информацию в теле запроса
+    for index, u in enumerate(fake_database['users']):
+        # так как в нашей бд юзеры хранятся в списке, нам нужно найти их индексы внутри этого списка
         if u['id'] == user_id:
-            fake_database['users'][index] = user    # обновляем юзера в бд по соответствующему ему индексу из списка users
+            fake_database['users'][index] = user
+            # обновляем юзера в бд по соответствующему ему индексу из списка users
             return user
 
 
 @api.delete('/user/{user_id}')
-def delete_user(user_id: int = fastapi.Path()): # используя fastapi.Path() мы явно указываем, что переменную нужно брать из пути
-    for index, u in enumerate(fake_database['users']): # так как в нашей бд юзеры хранятся в списке, нам нужно найти их индексы внутри этого списка
+def delete_user(user_id: int = fastapi.Path()):
+    # используя fastapi.Path() мы явно указываем, что переменную нужно брать из пути
+    for index, u in enumerate(fake_database['users']):
+        # так как в нашей бд юзеры хранятся в списке, нам нужно найти их индексы внутри этого списка
         if u['id'] == user_id:
             old_db = copy.deepcopy(fake_database) # делаем полную копию объекта в переменную old_db, чтобы было с чем сравнить
             del fake_database['users'][index]    # удаляем юзера из бд

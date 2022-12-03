@@ -19,7 +19,7 @@ friendship_pairs = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3), (3, 4),
 
 friendships = {user["id"]: [] for user in users}
 
-#print(*users)
+# print(*users)
 
 
 #заполняем друзей
@@ -28,3 +28,13 @@ for i, j in friendship_pairs:
     friendships[j].append(i)  # Add i as a friend of user j
 
 # print(friendships)
+
+def number_of_friends(user):
+    #ск друзей есть у юзера
+    return len(user["friends"])
+
+total_connections = sum(number_of_friends(user) for user in users)
+
+num_users = len(users) # Длина списка пользователей
+avg_connections = total_connections / num_users # 24 / 10 = 2.4
+

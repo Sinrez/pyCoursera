@@ -9,25 +9,24 @@ cursor = conn.cursor()
 def get_usd_course():
 
     now = dt.date.today()
-    url_in = 'https://www.banki.ru/products/currency/bank/sberbank/usd/moskva/#bank-rates'
+    url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
     resp = req.get(url_in)
     soup = BeautifulSoup(resp.text, 'html.parser')
-    items = soup.find_all("td", class_='font-size-large')
-    buy_in = str(list(items)[0])
-    #вытаскиваем из тегов покупку usd и продажу
-    sale_in  = str(list(items)[1])
+    items_buy = soup.find_all('span', class_='float-convert__btn', id="buy_usd")
+    items_sell = soup.find_all('span', class_='float-convert__btn', id="sell_usd")
+    # вытаскиваем из тегов покупку usd и продажу
+    buy_in = str(items_buy).split()[5]
+    sale_in = str(items_sell).split()[5]
+    sale_res = float(sale_in[sale_in.find('">') + 2:sale_in.find('</')])
+    buy_res = float(buy_in[buy_in.find('">') + 2:buy_in.find('</')])
+    spread = sale_res - buy_res
 
-    buy_val = float(buy_in[buy_in.find('">')+2:buy_in.find('</')].strip().replace(',','.'))
-    # вырезаем из тега число - сумму покупки/продажи
-    sale_val = float(sale_in[sale_in.find('">')+2:sale_in.find('</')].strip().replace(',','.'))
-    spread = sale_val - buy_val
-
-    return buy_val, sale_val, spread, now
+    return buy_res, sale_res, spread, now
 
 def db_create():
     try:
         # Создаем таблицу
-        cursor.execute('''CREATE TABLE IF NOT EXISTS spread (buy_val float , sale_val float, spread float, cur_date text)''')
+        cursor.execute('''CREATE TABLE IF NOT EXISTS spread (buy_val float , sale_val float, spread float, cur_date date )''')
     except sqlite3.ProgrammingError as er0:
         print(f'Таблица не найдена или уже существует: {er0}')
     except sqlite3.Warning as er1:

@@ -2,8 +2,8 @@ from bs4 import BeautifulSoup
 import requests as req
 import sqlite3
 import datetime as dt
-from matplotlib import pyplot as plt
-
+from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
+import warnings
 
 conn = sqlite3.connect('usd_spread.sqlite')
 cursor = conn.cursor()
@@ -67,12 +67,17 @@ def return_all_entries() -> list:
     return res
 
 def make_graph(lst) -> None:
-    x_val = [l[3] for l in lst]
-    y_val = [l[2] for l in lst]
-    plt.title('Динамика спреда покупка-продажа USD $')
-    plt.plot(x_val, y_val)
-    plt.show()
-
+    try:
+        x_val = [l[3] for l in lst]
+        y_val = [l[2] for l in lst]
+        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
+        plt.xlabel('Дата')
+        plt.ylabel('Спред')
+        plt.title('Динамика спреда покупка-продажа USD $')
+        plt.plot(x_val, y_val, color='red')
+        plt.show()
+    except Exception as ex0:
+        print(f'Ошибка при построении графика {ex0}')
 
 if __name__ == '__main__':
     db_create()

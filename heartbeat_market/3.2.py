@@ -2,12 +2,13 @@ from bs4 import BeautifulSoup
 import requests as req
 import sqlite3
 import datetime as dt
+from matplotlib import pyplot as plt
+
 
 conn = sqlite3.connect('usd_spread.sqlite')
 cursor = conn.cursor()
 
-
-def get_usd_course():
+def get_usd_course() -> tuple:
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
     resp = req.get(url_in)
@@ -24,7 +25,7 @@ def get_usd_course():
     return buy_res, sale_res, spread, now
 
 
-def db_create():
+def db_create() -> None:
     try:
         # Создаем таблицу
         cursor.execute(
@@ -35,7 +36,7 @@ def db_create():
         exit(f'Ошибка БД {er1}')
 
 
-def add_data():
+def add_data() ->None:
     mydata = get_usd_course()
     try:
         cursor.execute("INSERT INTO spread (buy_val, sale_val, spread, cur_date) VALUES (?, ?, ?, ?)", mydata)
@@ -43,24 +44,41 @@ def add_data():
     except sqlite3.IntegrityError as er3:
         print(f'За сегодняшнюю дату {dt.date.today()} уже есть запись в базе! {er3} ')
 
-def del_data(del_data):
+def del_data(del_data) -> None:
     sql_del_query = """DELETE FROM spread where cur_date = ? """
     cursor.execute(sql_del_query, (del_data, ))
     conn.commit()
     print("Запись успешно удалена")
 
-def return_all_entries():
+def print_all_entries() -> None:
     cursor.execute('SELECT  * FROM spread')
     row = cursor.fetchone()
     while row is not None:
         print(row)
         row = cursor.fetchone()
 
+def return_all_entries() -> list:
+    cursor.execute('SELECT  * FROM spread')
+    row = cursor.fetchone()
+    res = []
+    while row is not None:
+        res.append(row)
+        row = cursor.fetchone()
+    return res
+
+def make_graph(lst) -> None:
+    x_val = [l[3] for l in lst]
+    y_val = [l[2] for l in lst]
+    plt.title('Динамика спреда покупка-продажа USD $')
+    plt.plot(x_val, y_val)
+    plt.show()
+
 
 if __name__ == '__main__':
     db_create()
-    add_data()
-    return_all_entries()
+    make_graph((return_all_entries()))
+    # add_data()
+    # print_all_entries()
     # del_data('2022-12-13')
     #return_all_entries()
     cursor.close()

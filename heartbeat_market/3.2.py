@@ -6,8 +6,8 @@ import datetime as dt
 conn = sqlite3.connect('usd_spread.sqlite')
 cursor = conn.cursor()
 
-def get_usd_course():
 
+def get_usd_course():
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
     resp = req.get(url_in)
@@ -23,31 +23,45 @@ def get_usd_course():
 
     return buy_res, sale_res, spread, now
 
+
 def db_create():
     try:
         # Создаем таблицу
-        cursor.execute('''CREATE TABLE IF NOT EXISTS spread (buy_val float , sale_val float, spread float, cur_date date )''')
+        cursor.execute(
+            '''CREATE TABLE IF NOT EXISTS spread (buy_val float , sale_val float, spread float, cur_date date primary key,unique(cur_date))''')
     except sqlite3.ProgrammingError as er0:
         print(f'Таблица не найдена или уже существует: {er0}')
     except sqlite3.Warning as er1:
         exit(f'Ошибка БД {er1}')
 
+
 def add_data():
     mydata = get_usd_course()
-    cursor.execute("INSERT INTO spread (buy_val, sale_val, spread, cur_date) VALUES (?, ?, ?, ?)", mydata)
+    try:
+        cursor.execute("INSERT INTO spread (buy_val, sale_val, spread, cur_date) VALUES (?, ?, ?, ?)", mydata)
+        conn.commit()
+    except sqlite3.IntegrityError as er3:
+        print(f'За сегодняшнюю дату {dt.date.today()} уже есть запись в базе! {er3} ')
+
+def del_data(del_data):
+    sql_del_query = """DELETE FROM spread where cur_date = ? """
+    cursor.execute(sql_del_query, (del_data, ))
     conn.commit()
+    print("Запись успешно удалена")
 
 def return_all_entries():
-    cursor.execute('SELECT * FROM spread')
+    cursor.execute('SELECT  * FROM spread')
     row = cursor.fetchone()
     while row is not None:
         print(row)
         row = cursor.fetchone()
 
+
 if __name__ == '__main__':
     db_create()
     add_data()
     return_all_entries()
+    # del_data('2022-12-13')
+    #return_all_entries()
     cursor.close()
     conn.close()
-

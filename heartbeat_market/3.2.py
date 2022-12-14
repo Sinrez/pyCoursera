@@ -109,9 +109,9 @@ def make_graph(lst) -> None:
 if __name__ == '__main__':
     db_create()
     make_graph((return_all_entries()))
-    # add_data()
-    # print_all_entries()
+    add_data()
+    print_all_entries()
     # del_data('2022-12-13')
-    # return_all_entries()
+    # print(return_all_entries())
     # cursor.close()
     # conn.close()

@@ -6,10 +6,6 @@ from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
 import warnings
 
 
-# начальный вариант соединения с БД. Внесен в каждую функцию, чтобы не держать соединение
-# conn = sqlite3.connect('usd_spread.sqlite')
-# cursor = conn.cursor()
-
 def get_usd_course() -> tuple:
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
@@ -106,12 +102,44 @@ def make_graph(lst) -> None:
         print(f'Ошибка при построении графика {ex0}')
 
 
+def check_q(d) -> None:
+    if d.lower() == 'q':
+        exit(f'Работа завершена')
+
+
+def router():
+    "основной блок программы"
+    the_tag = input(
+        'Вы работаете с топорной программой ввода заметок, если решили выйти - введите Q, если нет - любую клавишу :) ').strip().lower()
+    while (the_tag != 'q'):
+        inp_check = (input('''Введите -
+        1 чтобы добавить курс в БД
+        2 чтобы построить график динамики спреда
+        3 чтобы вывести все записи курсов из БД
+        4 чтобы удалить запись из БД по дате
+        q чтобы выйти из программы: ''')).strip()
+
+        check_q(inp_check)
+        try:
+            inp_check = int(inp_check)
+        except ValueError:
+            print('Нужно ввести число!')
+
+        if inp_check == 1:
+            add_data()
+        elif inp_check == 2:
+            make_graph((return_all_entries()))
+        elif inp_check == 3:
+            print(20 * '-')
+            print_all_entries()
+            print(20 * '-')
+        elif inp_check == 4:
+            print(20 * '-')
+            date_del = input('Введите дату в формате YYYY-MM-DD: ')
+            del_data(date_del)
+        elif inp_check == 'q':
+            break
+
+
 if __name__ == '__main__':
-    db_create()
-    make_graph((return_all_entries()))
-    add_data()
-    print_all_entries()
-    # del_data('2022-12-13')
-    # print(return_all_entries())
-    # cursor.close()
-    # conn.close()
+    router()

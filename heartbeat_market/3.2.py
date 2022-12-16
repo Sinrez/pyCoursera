@@ -4,11 +4,28 @@ import sqlite3
 import datetime as dt
 from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
 import warnings
+import os
+import time
 
+def check_url(in_url):
+    """
+    Функция отправляет запрос HEAD, чтобы определить, существует ли ресурс, не загружая его содержимое
+    """
+    try:
+        r = req.head(in_url, allow_redirects=True)
+        #405 код учтен как позитивный конкретно для данного ресурса-источника курса
+        if r.status_code not in (200,405):
+            print(f'Запрошенный ресурс недоступен, код: {r.status_code}')
+    except req.exceptions.MissingSchema:
+        print('Invalid URL')
+    except Exception:
+        print('Ошибка формата запрашиваемого ресурса')
 
 def get_usd_course() -> tuple:
+    """Функция выполняет загрузку курса USD и расчет спреда"""
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
+    check_url(url_in)
     resp = req.get(url_in)
     soup = BeautifulSoup(resp.text, 'html.parser')
     items_buy = soup.find_all('span', class_='float-convert__btn', id="buy_usd")
@@ -24,6 +41,7 @@ def get_usd_course() -> tuple:
 
 
 def db_create() -> None:
+    "Функция выполняет создание БД для хранения истории курсов и спреда"
     try:
         conn = sqlite3.connect('usd_spread.sqlite')
         cursor = conn.cursor()
@@ -47,8 +65,13 @@ def add_data() -> None:
         conn.commit()
         cursor.close()
         conn.close()
+        # buy_res, sale_res, spread, now
+        print(f'Курс за {conn[3]} добавлен')
+        print(f'Покупка: {conn[0]} Продажа: {conn[1]}')
     except sqlite3.IntegrityError as er3:
         print(f'За сегодняшнюю дату {dt.date.today()} уже есть запись в базе! {er3} ')
+    except Exception as er4:
+        print(f'Произошла ошибка записи в БД {er4}')
 
 
 def del_data(del_data) -> None:
@@ -110,13 +133,14 @@ def check_q(d) -> None:
 def router():
     "основной блок программы"
     the_tag = input(
-        'Вы работаете с топорной программой ввода заметок, если решили выйти - введите Q, если нет - любую клавишу :) ').strip().lower()
+        'Вы работаете с программой просмотра спреда курса USD, если решили выйти - введите Q, если нет - любую клавишу :) ').strip().lower()
     while (the_tag != 'q'):
         inp_check = (input('''Введите -
         1 чтобы добавить курс в БД
         2 чтобы построить график динамики спреда
         3 чтобы вывести все записи курсов из БД
         4 чтобы удалить запись из БД по дате
+        5 чтобы создать базу данных для хранения курса и спреда
         q чтобы выйти из программы: ''')).strip()
 
         check_q(inp_check)
@@ -126,7 +150,14 @@ def router():
             print('Нужно ввести число!')
 
         if inp_check == 1:
+            print(20 * '-')
+            if not os.path.exists('usd_spread.sqlite'):
+                print('Подождите, создаю БД!')
+                db_create()
+                time.sleep(5)
+                print('БД создана')
             add_data()
+            print(20 * '-')
         elif inp_check == 2:
             make_graph((return_all_entries()))
         elif inp_check == 3:
@@ -137,6 +168,8 @@ def router():
             print(20 * '-')
             date_del = input('Введите дату в формате YYYY-MM-DD: ')
             del_data(date_del)
+        elif inp_check == 5:
+            db_create()
         elif inp_check == 'q':
             break
 

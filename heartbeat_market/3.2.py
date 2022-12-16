@@ -56,14 +56,15 @@ def db_create() -> None:
         exit(f'Ошибка БД {er1}')
 
 
+
 def add_data() -> None:
     mydata = get_usd_course()
     try:
         conn = sqlite3.connect('usd_spread.sqlite')
         cursor = conn.cursor()
         cursor.execute("INSERT INTO spread (buy_val, sale_val, spread, cur_date) VALUES (?, ?, ?, ?)", mydata)
-        conn.commit()
         cursor.close()
+        conn.commit()
         conn.close()
         # buy_res, sale_res, spread, now
         print(f'Курс за {conn[3]} добавлен')
@@ -79,8 +80,8 @@ def del_data(del_data) -> None:
     cursor = conn.cursor()
     sql_del_query = """DELETE FROM spread where cur_date = ? """
     cursor.execute(sql_del_query, (del_data,))
-    conn.commit()
     cursor.close()
+    conn.commit()
     conn.close()
     print("Запись успешно удалена")
 
@@ -131,7 +132,6 @@ def check_q(d) -> None:
 
 
 def router():
-    "основной блок программы"
     the_tag = input(
         'Вы работаете с программой просмотра спреда курса USD, если решили выйти - введите Q, если нет - любую клавишу :) ').strip().lower()
     while (the_tag != 'q'):
@@ -151,11 +151,6 @@ def router():
 
         if inp_check == 1:
             print(20 * '-')
-            if not os.path.exists('usd_spread.sqlite'):
-                print('Подождите, создаю БД!')
-                db_create()
-                time.sleep(5)
-                print('БД создана')
             add_data()
             print(20 * '-')
         elif inp_check == 2:
@@ -169,10 +164,11 @@ def router():
             date_del = input('Введите дату в формате YYYY-MM-DD: ')
             del_data(date_del)
         elif inp_check == 5:
+            print('Подождите, создаю БД!')
             db_create()
+            print('БД создана')
         elif inp_check == 'q':
             break
-
 
 if __name__ == '__main__':
     router()

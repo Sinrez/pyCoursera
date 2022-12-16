@@ -5,7 +5,6 @@ import datetime as dt
 from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
 import warnings
 import os
-import time
 
 def check_url(in_url):
     """
@@ -63,16 +62,20 @@ def add_data() -> None:
         conn = sqlite3.connect('usd_spread.sqlite')
         cursor = conn.cursor()
         cursor.execute("INSERT INTO spread (buy_val, sale_val, spread, cur_date) VALUES (?, ?, ?, ?)", mydata)
-        cursor.close()
         conn.commit()
+        cursor.close()
         conn.close()
         # buy_res, sale_res, spread, now
         print(f'Курс за {conn[3]} добавлен')
         print(f'Покупка: {conn[0]} Продажа: {conn[1]}')
     except sqlite3.IntegrityError as er3:
         print(f'За сегодняшнюю дату {dt.date.today()} уже есть запись в базе! {er3} ')
+    except TypeError as te:
+        if not os.path.exists('usd_spread.sqlite'):
+            pass
     except Exception as er4:
         print(f'Произошла ошибка записи в БД {er4}')
+
 
 
 def del_data(del_data) -> None:
@@ -80,8 +83,8 @@ def del_data(del_data) -> None:
     cursor = conn.cursor()
     sql_del_query = """DELETE FROM spread where cur_date = ? """
     cursor.execute(sql_del_query, (del_data,))
-    cursor.close()
     conn.commit()
+    cursor.close()
     conn.close()
     print("Запись успешно удалена")
 
@@ -132,8 +135,14 @@ def check_q(d) -> None:
 
 
 def router():
+    if not os.path.exists('usd_spread.sqlite'):
+        print('Подождите, создаю БД!')
+        db_create()
+        print('БД создана')
+        # exit('Перезапустите программу!')
+
     the_tag = input(
-        'Вы работаете с программой просмотра спреда курса USD, если решили выйти - введите Q, если нет - любую клавишу :) ').strip().lower()
+        'Вы работаете с программой просмотра спреда курса USD, если решили выйти - введите q, если нет - любую клавишу :) ').strip().lower()
     while (the_tag != 'q'):
         inp_check = (input('''Введите -
         1 чтобы добавить курс в БД

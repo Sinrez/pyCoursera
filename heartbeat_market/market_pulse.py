@@ -57,6 +57,7 @@ def db_create() -> None:
 
 
 def add_data() -> None:
+    """Функция выполняет запись курса и спреда в БД"""
     mydata = get_usd_course()
     try:
         conn = sqlite3.connect('usd_spread.sqlite')
@@ -66,19 +67,23 @@ def add_data() -> None:
         cursor.close()
         conn.close()
         # buy_res, sale_res, spread, now
-        print(f'Курс за {conn[3]} добавлен')
-        print(f'Покупка: {conn[0]} Продажа: {conn[1]}')
+        print(f'Курс за {mydata[3]} добавлен')
+        print(f'Покупка: {mydata[0]} Продажа: {mydata[1]}')
+        print(f'Спред: {mydata[1] - mydata[0]}')
     except sqlite3.IntegrityError as er3:
         print(f'За сегодняшнюю дату {dt.date.today()} уже есть запись в базе! {er3} ')
     except TypeError as te:
         if not os.path.exists('usd_spread.sqlite'):
             pass
+        else:
+            print(f'Произошла ошибка записи в БД {te}')
+            # заглушка предупреждения об отсутствии БД после первого создания базы, хотя она уже создана - тупит поток или pyCharm
     except Exception as er4:
         print(f'Произошла ошибка записи в БД {er4}')
 
 
-
 def del_data(del_data) -> None:
+    """Функция выполняет удаление записи из БД"""
     conn = sqlite3.connect('usd_spread.sqlite')
     cursor = conn.cursor()
     sql_del_query = """DELETE FROM spread where cur_date = ? """
@@ -90,6 +95,7 @@ def del_data(del_data) -> None:
 
 
 def print_all_entries() -> None:
+    """Функция выводит все записи из БД"""
     conn = sqlite3.connect('usd_spread.sqlite')
     cursor = conn.cursor()
     cursor.execute('SELECT  * FROM spread')
@@ -139,7 +145,6 @@ def router():
         print('Подождите, создаю БД!')
         db_create()
         print('БД создана')
-        # exit('Перезапустите программу!')
 
     the_tag = input(
         'Вы работаете с программой просмотра спреда курса USD, если решили выйти - введите q, если нет - любую клавишу :) ').strip().lower()
@@ -167,6 +172,7 @@ def router():
         elif inp_check == 3:
             print(20 * '-')
             print_all_entries()
+            # print(return_all_entries())
             print(20 * '-')
         elif inp_check == 4:
             print(20 * '-')

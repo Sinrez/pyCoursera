@@ -134,6 +134,20 @@ def make_graph(lst) -> None:
     except Exception as ex0:
         print(f'Ошибка при построении графика {ex0}')
 
+def return_graph():
+    lst = return_all_entries()
+    try:
+        x_val = [l[3] for l in lst]
+        y_val = [l[2] for l in lst]
+        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
+        plt.xlabel('Дата')
+        plt.ylabel('Спред')
+        plt.title('Динамика спреда покупка-продажа USD $')
+        plt.plot(x_val, y_val, color='red')
+        plt.savefig('sprd.png')
+    except Exception as ex0:
+        print(f'Ошибка при построении графика {ex0}')
+
 
 def check_q(d) -> None:
     if d.lower() == 'q':

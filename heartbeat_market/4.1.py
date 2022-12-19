@@ -3,14 +3,15 @@ import telebot
 import market_pulse as mp
 
 bot = telebot.TeleBot(config1.TOKEN)
-#Присваивание токена
-
 
 @bot.message_handler(content_types=["text"])
-def repeat_all_messages(message): # Название функции не играет никакой роли
+def messages(message): # функция вывода спреда
     if message.text == '1':
         bot.send_message(message.chat.id, '\n'.join(map(str, mp.return_all_entries()[-1])))
-#Функция повтора сообщений
+    elif message.text == '2':
+        mp.return_graph()
+        bot.send_photo(message.chat.id, open('sprd.png', 'rb'))
 
+#Функция повтора сообщений
 bot.polling(none_stop=True)
 #Цикл

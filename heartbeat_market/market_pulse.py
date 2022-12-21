@@ -128,7 +128,7 @@ def return_last_entries() -> list:
     res = cursor.fetchall()
     cursor.close()
     conn.close()
-    return res
+    return f'На {res[0][3]} курс покупки: {res[0][0]} руб за $, курс продажи: {res[0][1]}, спред: {res[0][2]}'
 
 
 def make_graph(lst) -> None:
@@ -138,6 +138,7 @@ def make_graph(lst) -> None:
         warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.xlabel('Дата')
         plt.ylabel('Спред')
+        plt.ylim(2,12)
         plt.title('Динамика спреда покупка-продажа USD $')
         plt.plot(x_val, y_val, color='red')
         plt.show()
@@ -152,6 +153,7 @@ def return_graph():
         warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.xlabel('Дата')
         plt.ylabel('Спред')
+        plt.ylim(2, 12)
         plt.title('Динамика спреда покупка-продажа USD $')
         plt.plot(x_val, y_val, color='red')
         plt.savefig('sprd.png')

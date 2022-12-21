@@ -10,5 +10,6 @@ def return_last_entries() -> list:
     cursor.close()
     conn.close()
     return f'На {res[0][3]} курс покупки: {res[0][0]} руб за $, курс продажи: {res[0][1]}, спред: {res[0][2]}'
+    # return res
 
 print(return_last_entries())

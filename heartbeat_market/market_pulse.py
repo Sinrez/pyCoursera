@@ -120,6 +120,16 @@ def return_all_entries() -> list:
     conn.close()
     return res
 
+def return_last_entries() -> list:
+    conn = sqlite3.connect('usd_spread.sqlite')
+    cursor = conn.cursor()
+    sql_query = """SELECT  * FROM spread where cur_date = ?"""
+    cursor.execute(sql_query, (dt.date.today(),))
+    res = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return res
+
 
 def make_graph(lst) -> None:
     try:

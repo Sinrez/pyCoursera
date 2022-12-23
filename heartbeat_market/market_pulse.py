@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
 import warnings
 import os
 
+
 def check_url(in_url):
     """
     Функция отправляет запрос HEAD, чтобы определить, существует ли ресурс, не загружая его содержимое
@@ -20,7 +21,7 @@ def check_url(in_url):
     except Exception:
         print('Ошибка формата запрашиваемого ресурса')
 
-def get_usd_course() -> tuple:
+def get_usd_course(url_in) -> tuple:
     """Функция выполняет загрузку курса USD и расчет спреда"""
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'

@@ -1,6 +1,8 @@
 import requests
 from random import choice
 
+
+
 url = 'http://httpbin.org/user-agent'
 
 def make_usr_agent():

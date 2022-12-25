@@ -21,7 +21,7 @@ def check_url(in_url):
     except Exception:
         print('Ошибка формата запрашиваемого ресурса')
 
-def get_usd_course(url_in) -> tuple:
+def get_usd_course() -> tuple:
     """Функция выполняет загрузку курса USD и расчет спреда"""
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
@@ -188,7 +188,7 @@ def router():
         try:
             inp_check = int(inp_check)
         except ValueError:
-            print('Нужно ввести число!')
+            print('Нужно ввести число или q для выхода!')
 
         if inp_check == 1:
             print(20 * '-')

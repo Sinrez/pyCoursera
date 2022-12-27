@@ -5,6 +5,7 @@ import datetime as dt
 from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
 import warnings
 import os
+from matplotlib.pyplot import MultipleLocator
 
 
 def check_url(in_url) -> None:
@@ -134,15 +135,19 @@ def return_last_entries() -> list:
 
 def make_graph(lst) -> None:
     try:
+        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
+        fig, ax = plt.subplots(figsize=(8, 8))
         x_val = [l[3] for l in lst]
         y_val = [l[2] for l in lst]
-        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.xlabel('Дата')
         plt.ylabel('Спред')
-        plt.xticks(rotation=45)
+        x_major_locator = MultipleLocator(2)
+        ax.xaxis.set_major_locator(x_major_locator)
+        plt.xticks(rotation=30)
         plt.ylim(2,12)
         plt.title('Динамика спреда покупка-продажа USD $')
         plt.plot(x_val, y_val, color='red')
+        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.show()
     except Exception as ex0:
         print(f'Ошибка при построении графика {ex0}')

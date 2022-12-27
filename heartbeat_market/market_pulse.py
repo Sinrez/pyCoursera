@@ -7,7 +7,7 @@ import warnings
 import os
 
 
-def check_url(in_url):
+def check_url(in_url) -> None:
     """
     Функция отправляет запрос HEAD, чтобы определить, существует ли ресурс, не загружая его содержимое
     """
@@ -139,6 +139,7 @@ def make_graph(lst) -> None:
         warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.xlabel('Дата')
         plt.ylabel('Спред')
+        plt.xticks(rotation=45)
         plt.ylim(2,12)
         plt.title('Динамика спреда покупка-продажа USD $')
         plt.plot(x_val, y_val, color='red')
@@ -167,7 +168,7 @@ def check_q(d) -> None:
         exit(f'Работа завершена')
 
 
-def router():
+def router() -> None:
     if not os.path.exists('usd_spread.sqlite'):
         print('Подождите, создаю БД!')
         db_create()

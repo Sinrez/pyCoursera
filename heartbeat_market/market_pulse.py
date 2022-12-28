@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt, MatplotlibDeprecationWarning
 import warnings
 import os
 from matplotlib.pyplot import MultipleLocator
+from user_agent import make_usr_agent
 
 
 def check_url(in_url) -> None:
@@ -13,7 +14,7 @@ def check_url(in_url) -> None:
     Функция отправляет запрос HEAD, чтобы определить, существует ли ресурс, не загружая его содержимое
     """
     try:
-        r = req.head(in_url, allow_redirects=True)
+        r = req.head(in_url, allow_redirects=True, headers=make_usr_agent())
         #405 код учтен как позитивный конкретно для данного ресурса-источника курса
         if r.status_code not in (200,405):
             print(f'Запрошенный ресурс недоступен, код: {r.status_code}')
@@ -27,7 +28,7 @@ def get_usd_course() -> tuple:
     now = dt.date.today()
     url_in = 'https://mainfin.ru/bank/alfabank/currency/usd/moskva'
     check_url(url_in)
-    resp = req.get(url_in)
+    resp = req.get(url_in, headers=make_usr_agent())
     soup = BeautifulSoup(resp.text, 'html.parser')
     items_buy = soup.find_all('span', class_='float-convert__btn', id="buy_usd")
     items_sell = soup.find_all('span', class_='float-convert__btn', id="sell_usd")
@@ -155,14 +156,19 @@ def make_graph(lst) -> None:
 def return_graph():
     lst = return_all_entries()
     try:
+        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
+        fig, ax = plt.subplots(figsize=(8, 8))
         x_val = [l[3] for l in lst]
         y_val = [l[2] for l in lst]
-        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.xlabel('Дата')
         plt.ylabel('Спред')
+        x_major_locator = MultipleLocator(2)
+        ax.xaxis.set_major_locator(x_major_locator)
+        plt.xticks(rotation=30)
         plt.ylim(2, 12)
         plt.title('Динамика спреда покупка-продажа USD $')
         plt.plot(x_val, y_val, color='red')
+        warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.savefig('sprd.png')
     except Exception as ex0:
         print(f'Ошибка при построении графика {ex0}')

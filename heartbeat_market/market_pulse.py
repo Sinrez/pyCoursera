@@ -175,7 +175,7 @@ def return_graph():
 
 
 def check_q(d) -> None:
-    if d.lower() == 'q':
+    if d.lower() in ('q','й'):
         exit(f'Работа завершена')
 
 
@@ -187,7 +187,7 @@ def router() -> None:
 
     the_tag = input(
         'Вы работаете с программой просмотра спреда курса USD, если решили выйти - введите q, если нет - любую клавишу :) ').strip().lower()
-    while (the_tag != 'q'):
+    while (the_tag not in ('q', 'й')):
         inp_check = (input('''Введите -
         1 чтобы добавить курс в БД
         2 чтобы построить график динамики спреда
@@ -221,7 +221,7 @@ def router() -> None:
             print('Подождите, создаю БД!')
             db_create()
             print('БД создана')
-        elif inp_check == 'q':
+        elif inp_check in ('q', 'й'):
             break
 
 if __name__ == '__main__':

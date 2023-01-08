@@ -14,4 +14,4 @@ sale_in = str(items_sell).split()[5]
 sale_res = float(sale_in[sale_in.find('">')+2:sale_in.find('</')])
 buy_res = float(buy_in[buy_in.find('">')+2:buy_in.find('</')])
 print(buy_res)
-print(sale_res)
+print(items_sell)

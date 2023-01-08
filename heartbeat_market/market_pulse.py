@@ -33,11 +33,14 @@ def get_usd_course() -> tuple:
     items_buy = soup.find_all('span', class_='float-convert__btn', id="buy_usd")
     items_sell = soup.find_all('span', class_='float-convert__btn', id="sell_usd")
     # вытаскиваем из тегов покупку usd и продажу
-    buy_in = str(items_buy).split()[5]
-    sale_in = str(items_sell).split()[5]
-    sale_res = float(sale_in[sale_in.find('">') + 2:sale_in.find('</')])
-    buy_res = float(buy_in[buy_in.find('">') + 2:buy_in.find('</')])
-    spread = sale_res - buy_res
+    try:
+        buy_in = str(items_buy).split()[5]
+        sale_in = str(items_sell).split()[5]
+        sale_res = float(sale_in[sale_in.find('">') + 2:sale_in.find('</')])
+        buy_res = float(buy_in[buy_in.find('">') + 2:buy_in.find('</')])
+        spread = sale_res - buy_res
+    except IndexError as ier:
+        exit (f'Ошибка загрузки курса из источника - нет данных по курсу, повторите попытку позже {ier}')
 
     return buy_res, sale_res, spread, now
 

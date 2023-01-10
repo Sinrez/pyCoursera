@@ -7,6 +7,13 @@ import warnings
 import os
 from matplotlib.pyplot import MultipleLocator
 from user_agent import make_usr_agent
+from urllib.error import HTTPError, URLError
+
+
+class ErrLoadUsdCourse(IndexError):
+    """Вызывается, когда на сайте-источнике курса не загружены курсы
+    при попытке записи пустого значения курса"""
+    pass
 
 
 def check_url(in_url) -> None:
@@ -15,13 +22,18 @@ def check_url(in_url) -> None:
     """
     try:
         r = req.head(in_url, allow_redirects=True, headers=make_usr_agent())
-        #405 код учтен как позитивный конкретно для данного ресурса-источника курса
-        if r.status_code not in (200,405):
+        # 405 код учтен как позитивный конкретно для данного ресурса-источника курса
+        if r.status_code not in (200, 405):
             print(f'Запрошенный ресурс недоступен, код: {r.status_code}')
     except req.exceptions.MissingSchema:
         print('Invalid URL')
-    except Exception:
-        print('Ошибка формата запрашиваемого ресурса')
+    except HTTPError as ht_er:
+        print(f'Проблема с доступностью ресурса: {ht_er}')
+    except URLError as url_er:
+        print(f'Ресурс-источник не найден, нужно проверить: {url_er}')
+    except Exception as ex_url:
+        print(f'Другая Ошибка формата запрашиваемого ресурса {ex_url}')
+
 
 def get_usd_course() -> tuple:
     """Функция выполняет загрузку курса USD и расчет спреда"""
@@ -40,7 +52,7 @@ def get_usd_course() -> tuple:
         buy_res = float(buy_in[buy_in.find('">') + 2:buy_in.find('</')])
         spread = sale_res - buy_res
     except IndexError as ier:
-        exit (f'Ошибка загрузки курса из источника - нет данных по курсу, повторите попытку позже {ier}')
+        raise ErrLoadUsdCourse(f'Ошибка загрузки курса из источника - нет данных по курсу, повторите попытку позже {ier}')
 
     return buy_res, sale_res, spread, now
 
@@ -59,7 +71,6 @@ def db_create() -> None:
         print(f'Таблица не найдена или уже существует: {er0}')
     except sqlite3.Warning as er1:
         exit(f'Ошибка БД {er1}')
-
 
 
 def add_data() -> None:
@@ -126,6 +137,7 @@ def return_all_entries() -> list:
     conn.close()
     return res
 
+
 def return_last_entries() -> list:
     conn = sqlite3.connect('usd_spread.sqlite')
     cursor = conn.cursor()
@@ -148,13 +160,14 @@ def make_graph(lst) -> None:
         x_major_locator = MultipleLocator(2)
         ax.xaxis.set_major_locator(x_major_locator)
         plt.xticks(rotation=30)
-        plt.ylim(2,20)
+        plt.ylim(2, 20)
         plt.title('Динамика спреда покупка-продажа USD $')
         plt.plot(x_val, y_val, color='red')
         warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
         plt.show()
     except Exception as ex0:
         print(f'Ошибка при построении графика {ex0}')
+
 
 def return_graph():
     lst = return_all_entries()
@@ -178,7 +191,7 @@ def return_graph():
 
 
 def check_q(d) -> None:
-    if d.lower() in ('q','й'):
+    if d.lower() in ('q', 'й'):
         exit(f'Работа завершена')
 
 
@@ -226,6 +239,7 @@ def router() -> None:
             print('БД создана')
         elif inp_check in ('q', 'й'):
             break
+
 
 if __name__ == '__main__':
     router()

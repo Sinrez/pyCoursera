@@ -53,6 +53,8 @@ def get_usd_course() -> tuple:
         spread = sale_res - buy_res
     except IndexError as ier:
         raise ErrLoadUsdCourse(f'Ошибка загрузки курса из источника - нет данных по курсу, повторите попытку позже {ier}')
+    except ErrLoadUsdCourse as err_co:
+        exit(f'{err_co.args[0]}')
 
     return buy_res, sale_res, spread, now
 

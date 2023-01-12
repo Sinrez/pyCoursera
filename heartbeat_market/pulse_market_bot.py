@@ -38,6 +38,7 @@ def start(message):
 def messages(message):
     # функция вывода спреда
     print(f"Message from {str(message.chat.first_name)} {str(message.chat.last_name)} (id: {str(message.from_user.id)})")
+    # логирвоание работы пользователя бота
     py_logger.info(f"Message from {str(message.chat.first_name)} {str(message.chat.last_name)} (id: {str(message.from_user.id)})")
     print(f"Text: {str(message.text)}")
     py_logger.info(f"Text: {str(message.text)}")
@@ -58,7 +59,6 @@ def messages(message):
         bot.send_message(message.chat.id, cb.return_cb_usd())
     else:
         bot.send_message(message.chat.id, 'Такие модные команды пока недоступны! 💨')
-
 
 # Функция повтора сообщений
 bot.polling(none_stop=True, interval=0)  # обязательная для работы бота часть

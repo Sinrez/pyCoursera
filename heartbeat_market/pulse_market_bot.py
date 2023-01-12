@@ -3,6 +3,21 @@ import telebot
 import market_pulse as mp
 from telebot import types
 import cb_usd as cb
+import logging
+
+# получение пользовательского логгера и установка уровня логирования
+py_logger = logging.getLogger(__name__)
+py_logger.setLevel(logging.INFO)
+
+# настройка обработчика и форматировщика
+py_handler = logging.FileHandler(f"{__name__}.log", mode='w')
+py_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
+
+# добавление форматировщика к обработчику
+py_handler.setFormatter(py_formatter)
+# добавление обработчика к логгеру
+py_logger.addHandler(py_handler)
+py_logger.info(f"Testing the custom logger for module {__name__}...")
 
 bot = telebot.TeleBot(config1.TOKEN)
 
@@ -20,7 +35,12 @@ def start(message):
     bot.send_message(message.from_user.id, user_first_name + ' ' + msg, reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
-def messages(message):  # функция вывода спреда
+def messages(message):
+    # функция вывода спреда
+    print(f"Message from {str(message.chat.first_name)} {str(message.chat.last_name)} (id: {str(message.from_user.id)})")
+    py_logger.info(f"Message from {str(message.chat.first_name)} {str(message.chat.last_name)} (id: {str(message.from_user.id)})")
+    print(f"Text: {str(message.text)}")
+    py_logger.info(f"Text: {str(message.text)}")
     if message.text == 'Начать':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)  # создание новых кнопок
         btn1 = types.KeyboardButton(text='Узнать курс 💰')
@@ -43,3 +63,7 @@ def messages(message):  # функция вывода спреда
 # Функция повтора сообщений
 bot.polling(none_stop=True, interval=0)  # обязательная для работы бота часть
 # Цикл
+
+if __name__ == '__main__':
+    py_logger.info('Работа с ботом завершена!')
+    print('Работа с ботом завершена!')

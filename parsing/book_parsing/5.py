@@ -56,5 +56,5 @@ def followExternalOnly(startingSite):
     print('Random external link is: {}'.format(externalLink))
     followExternalOnly(externalLink)
 
-followExternalOnly('http://oreilly.com')
-# followExternalOnly('https://mai.ru/')
+# followExternalOnly('http://oreilly.com')
+followExternalOnly('https://mai.ru/')

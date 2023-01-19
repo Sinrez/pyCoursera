@@ -1,6 +1,6 @@
 from time import sleep
 from bs4 import BeautifulSoup
-from selenium import webdriver
+from parsing.selenium import webdriver
 import os
 
 op = webdriver.ChromeOptions()

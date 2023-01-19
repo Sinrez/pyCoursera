@@ -1,7 +1,7 @@
 
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from parsing.selenium import webdriver
+from parsing.selenium import By
 
 url = "https://parsinger.ru/selenium/6/6.html"
 number = ((12434107696 * 3) * 2) + 1

@@ -1,5 +1,5 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from parsing.selenium import webdriver
+from parsing.selenium import By
 
 url = "http://parsinger.ru/selenium/4/4.html"
 options = webdriver.ChromeOptions()

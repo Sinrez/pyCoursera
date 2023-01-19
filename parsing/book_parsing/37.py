@@ -1,5 +1,5 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from parsing.selenium import webdriver
+from parsing.selenium import By
 
 numbers = [1, 2, 3, 4, 8, 9, 11, 12, 13, 14, 15, 16, 17, 22, 23, 28, 29, 33, 34, 38,
 39, 43, 44, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 61, 62, 63, 64, 68, 69, 73,

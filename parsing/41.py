@@ -1,4 +1,4 @@
-from selenium import webdriver
+from parsing.selenium import webdriver
 
 res = 0
 with webdriver.Chrome() as webdriver:

@@ -1,4 +1,4 @@
-from selenium import webdriver
+from parsing.selenium import webdriver
 
 with webdriver.Chrome() as webdriver:
     # webdriver.get('https://ya.ru/')

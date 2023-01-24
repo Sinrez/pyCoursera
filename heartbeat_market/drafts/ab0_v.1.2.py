@@ -16,15 +16,11 @@ def get_coureses(ind_buy, ind_sell):
     driver.close()
     buy_res = float(values[ind_buy].text.strip().replace(' ₽', '').replace(',', '.'))
     sale_res = float(values[ind_sell].text.strip().replace(' ₽', '').replace(',', '.'))
-    # euro_buy = float(values[2].text.strip().replace(' ₽', '').replace(',', '.'))
-    # euro_sell = float(values[3].text.strip().replace(' ₽', '').replace(',', '.'))
-    # cny_buy = float(values[4].text.strip().replace(' ₽', '').replace(',', '.'))
-    # cny_sell = float(values[5].text.strip().replace(' ₽', '').replace(',', '.'))
-    # print(dollar_sell, dollar_buy)
-    # print(euro_sell, euro_buy)
-    # print(cny_sell, cny_buy)
     spread = sale_res - buy_res
-    return buy_res, sale_res, spread,  dt.date.today()
+    now = str(dt.datetime.today()).split()[0]
+    return buy_res, sale_res, spread, now
 
 if __name__ == '__main__':
-    print(get_coureses(0,1))
+    print(get_coureses(0,1))   #usd
+    print(get_coureses(2, 3))  # eur
+    print(get_coureses(4, 5))  # cny

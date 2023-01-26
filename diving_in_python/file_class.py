@@ -1,44 +1,30 @@
-import os
-import tempfile
-import datetime
+import os.path, tempfile
 
 
 class File:
+    """Интерфейс для работы с файлами"""
 
     def __init__(self, file_path):
         self.file_path = file_path
-        self.cur_position = 0
 
-        if not os.path.exists(file_path):
-            with open(file_path, 'w'):
-                pass
-
-    def write(self, content):
+    def write(self, data):
         with open(self.file_path, 'w') as f:
-            f.write(content)
+            f.write(data)
 
     def read(self):
-        with open(self.file_path, 'r') as f:
+        with open(self.file_path) as f:
             return f.read()
 
-    def __add__(self, other):
-        new_path = os.path.join(tempfile.gettempdir(), datetime.datetime.today().strftime("%Y%m%d%H%M%S"))
-        new_file = File(new_path)
-        new_file.write(self.read() + other.read())
-        return new_file
+    def __add__(self, obj):
+        file_name = '-'.join([self.file_path, obj.file_path])
+        new_file_path = os.path.join(tempfile.gettempdir(), str(hash(file_name)))
+        new_obj = File(new_file_path)
+        new_obj.write(self.read() + obj.read())
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        with open(self.file_path, 'r') as f:
-            f.seek(self.cur_position)
-            line = f.readline()
-            if not line:
-                self.cur_position = 0
-                raise StopIteration('EOF')
-            self.cur_position = f.tell()
-            return line
+        return new_obj
 
     def __str__(self):
         return self.file_path
+
+    def __iter__(self):
+        return open(self.file_path, 'r')

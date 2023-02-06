@@ -1,5 +1,5 @@
-dp_table_blue = ["b", "l", "u", "e"]
-dp_table_clues = ["c", "l", "u", "e", "s"]
+dp_table_blue = ["h", "i", "s", "h"]
+dp_table_clues = ["f", "i", "s", "h"]
 dp_table = [[0 for i in range(len(dp_table_blue))] for i in range(len(dp_table_clues))] # (5,4)
 print(dp_table)
 

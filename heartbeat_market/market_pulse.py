@@ -9,6 +9,7 @@ from matplotlib.pyplot import MultipleLocator
 from user_agent import make_usr_agent
 from urllib.error import HTTPError, URLError
 
+# source env_market / bin / activate
 
 class ErrLoadUsdCourse(IndexError):
     """Вызывается, когда на сайте-источнике курса не загружены курсы

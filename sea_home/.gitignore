@@ -1,0 +1,24 @@
+*.pyc
+*.egg-info
+
+# Если вы программируете на Mac
+.DS_Store
+
+# Если вы пользуетесь виртуальными окружениями
+/env
+/env_home
+
+# Настройки и хранение секретных данных
+/.env
+/.env_home
+settings.py
+*.log
+.vscode/
+.idea/
+env/
+.DS_Store
+__pycache__/
+__init__.py
+__main__.log
+config1.py
+config2.py

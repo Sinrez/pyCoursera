@@ -9,7 +9,9 @@
 /env_market
 
 # Настройки и хранение секретных данных
+iml
 /.env
+/.iml
 /.env_market
 settings.py
 *.log

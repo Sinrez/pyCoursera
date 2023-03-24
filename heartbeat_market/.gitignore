@@ -15,6 +15,7 @@ iml
 /.env_market
 settings.py
 *.log
+.iml
 .vscode/
 .idea/
 env/
